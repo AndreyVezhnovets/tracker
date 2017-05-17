@@ -1,0 +1,29 @@
+<script src="/static/js/registration.js"></script>
+<script src="/static/js/relocate.js"></script>
+<div class="modal-dialog" xmlns:th="http://www.thymeleaf.org">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-body">
+            <table class="table table-hover">
+                <thead>
+                <th>name</th>
+                <th></th>
+                </thead>
+                <tbody>
+                <tr th:each="file : ${files}">
+                    <td data-toggle="modal" id="project_name"
+                        th:text="${file.getName()}"
+                        th:onclick="'javascript:relocate( \'/get/file\', \'fileId\', \'' + ${file.getId()} + '\');'"
+                        data-target="#edit_project">
+                    </td>
+                    <td th:onclick="'javascript:getRequest1( \'/deleteFile\', \'fileName\', \'' + ${file.getName()} + '\', \'' + ${file.getIssueId()} + '\');'">delete</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>

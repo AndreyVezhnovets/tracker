@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.8"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.8 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.8.xsd">
+
+    <changeSet author="AVezhnovets" id="create-1" dbms="mysql">
+
+<!--
+        <createTable tableName="employee">
+            <column autoIncrement="true" name="id" type="java.sql.Types.BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="java.sql.Types.VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="java.sql.Types.VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mail" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position" type="java.sql.Types.VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="java.sql.Types.VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="project">
+            <column name="id" type="java.sql.Types.BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="java.sql.Types.VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="java.sql.Types.VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manager" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="issue">
+            <column autoIncrement="true" name="id" type="java.sql.Types.BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="summary" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="java.sql.Types.VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="build_found" type="java.sql.Types.VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assignee" type="java.sql.Types.VARCHAR(50)"/>
+        </createTable>
+        <createTable tableName="build">
+            <column autoIncrement="true" name="id" type="java.sql.Types.INTEGER">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="version" type="java.sql.Types.VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_id" type="java.sql.Types.BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_address_project" references="project(id)"/>
+            </column>
+        </createTable>
+-->
+
+    </changeSet>
+</databaseChangeLog>

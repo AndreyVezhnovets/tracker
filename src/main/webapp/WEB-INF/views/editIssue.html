@@ -1,0 +1,90 @@
+<script src="/static/js/editIssue.js"></script>
+<script src="/static/js/registration.js"></script>
+<script type="text/javascript">
+    function showhide(x) {
+        var text = $("#"+x).val();
+
+        if (text === "Closed" || text === "Resolved"){
+            document.getElementById("Resolution0").style.display = "block";
+        }
+        else
+        {
+            document.getElementById("Resolution0").style.display = "none";
+
+        }
+    }
+</script>
+<div class="modal-dialog" xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit issue</h4>
+        </div>
+        <div class="alert alert-danger" id="error_during_add_in" role="alert" hidden>
+        </div>
+        <!--/*@thymesVar id="issue" type="com.bug.model.Issue"*/-->
+        <div class="modal-body">
+
+            <label for="id">Create Date:</label>
+            <input type="text" class="form-control" id="id" th:value="${issue.getId()}" readonly>
+
+            <label for="Create_Date">Create Date:</label>
+            <input type="text" class="form-control" id="Create_Date" th:value="${issue.getCreateDate()}" readonly>
+
+            <label for="Created_By">Created By:</label>
+            <input type="text" class="form-control" id="Created_By" th:value="${issue.getCreatedBy()}" readonly>
+
+            <label for="SummaryEdit">Summary:</label>
+            <input type="text" class="form-control" id="SummaryEdit" th:value="${issue.getSummary()}">
+            <label for="DescriptionEdit">Description:</label>
+            <input type="text" class="form-control" id="DescriptionEdit" th:value="${issue.getDescription()}">
+
+            <label for="StatusEdit">Status:</label>
+            <select class="form-control" id="StatusEdit" onchange="showhide('StatusEdit')">
+                <option>New</option>
+                <option>Assigned</option>
+                <option>In Progress</option>
+                <option>Resolved</option>
+                <option>Closed</option>
+                <option>Reopened</option>
+            </select>
+            <div id="Resolution0" hidden>
+                <label for="Resolution">Resolution:</label>
+                <input type="text" class="form-control" id="Resolution">
+            </div>
+            <label for="TypeEdit">Type:</label>
+            <select class="form-control" id="TypeEdit">
+                <option>Cosmetic</option>
+                <option>Bug</option>
+                <option>Feature</option>
+                <option>Performance</option>
+            </select>
+            <label for="PriorityEdit">Priority:</label>
+            <select class="form-control" id="PriorityEdit">
+                <option style="color: #ff0a0a">Critical</option>
+                <option style="color: #e28464">Major</option>
+                <option style="color: #bcba12">Important</option>
+                <option style="color: #00b102">Minor</option>
+            </select>
+            <label for="Project_nameEdit">Project:</label>
+            <select class="form-control" id="Project_nameEdit" onclick="getBuildVersions('#Build_found', '#Project_nameEdit')">
+                <!--/*@thymesVar id="project" type="com.bug.model.Project"*/-->
+                <!--/*@thymesVar id="projects" type="java"*/-->
+                <option th:each="project : ${projects}" th:text="${project.getName()}">project name</option>
+            </select>
+            <dev id="Build_found"></dev>
+            <label for="Project_nameEdit">Assignee:</label>
+            <select class="form-control" id="AssigneeEdit">
+                <option></option>
+                <!--/*@thymesVar id="employee" type="com.bug.model.Employee"*/-->
+                <!--/*@thymesVar id="employees" type="java"*/-->
+                <option th:each="employee : ${employees}" th:text="${employee.getName()}"></option>
+            </select>
+            <p id="old_idEdit" th:text="${issue.getId()}" hidden></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="edit_button" onclick="editIssue()">Edit</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>

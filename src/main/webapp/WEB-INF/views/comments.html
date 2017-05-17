@@ -1,0 +1,17 @@
+<!--<html>-->
+<dev xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="comment" type="com.bug.model.Comment"*/-->
+<dev th:each="comment : ${comments}">
+    <p id="commentText" th:text="${comment.getText()}"></p>
+    <p th:text="${comment.getAddedBy()}+' '+${comment.getAddedDate()}"></p>
+</dev>
+</dev>
+<!--
+<style>
+    #commentText {
+        border: 1px solid #000000;
+        padding: 10px;
+    }
+</style>
+</html>
+-->

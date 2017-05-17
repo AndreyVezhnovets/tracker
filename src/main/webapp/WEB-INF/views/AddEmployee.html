@@ -1,0 +1,41 @@
+<script src="/static/js/registration.js"></script>
+<div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add employee</h4>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-danger" id="error_during_sign_in" role="alert" hidden>
+            </div>
+            <div class="form-group">
+                <label for="new_name">Name:</label>
+                <input type="text" class="form-control" id="new_name">
+                <label for="new_surname">Surname:</label>
+                <input type="text" class="form-control" id="new_surname">
+            </div>
+            <div class="form-group">
+                <label for="new_mail">Email:</label>
+                <input type="email" class="form-control" id="new_mail">
+            </div>
+            <div class="form-group">
+                <label for="new_position">Position:</label>
+                <select class="form-control" id="new_position">
+                    <option>USER</option>
+                    <option>ADMINISTRATOR</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="new_password">Password:</label>
+                <input type="password" class="form-control" id="new_password">
+                <label for="confirm_password">Confirm password:</label>
+                <input type="password" class="form-control" id="confirm_password">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="edd_employee">Add employee</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>

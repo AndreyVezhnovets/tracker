@@ -1,0 +1,96 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bug tracking system</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/static/css/jquery-ui.css" rel="stylesheet"/>
+    <link href="/static/css/business-casual.css" rel="stylesheet"/>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+          rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic"
+          rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<div class="brand">Bug tarcker</div>
+<div class="address-bar"> | VAI |</div>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a id="start_page" href="/">start page</a>
+                </li>
+                <li>
+                    <a id="log_out">Log out</a>
+                </li>
+                <li>
+                    <a data-toggle="modal" onclick="htmlLoader('/addProject', '#add_project0')"
+                       data-target="#add_project0">Add new project</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <div class="row">
+        <div class="box">
+            <div class="col-lg-12 text-center">
+                <h1 class="brand-name">List</h1>
+                <hr class="tagline-divider">
+                <h2>
+                    <small>of
+                        <strong>projects</strong>
+                    </small>
+                </h2>
+                <div>
+                    <!--/*@thymesVar id="project" type="com.bug.model.Project"*/-->
+                    <table class="table table-hover">
+                        <thead>
+                        <th>name</th>
+                        <th>Manager</th>
+                        <th>Description</th>
+                        </thead>
+                        <tbody id="myTable1">
+                        <tr th:each="project : ${projects}">
+                            <td data-toggle="modal" id="project_name"
+                                th:text="${project.getName()}"
+                                th:onclick="'javascript:htmlLoader2( \'/editProject?projectId=\', \'#edit_project\', \'' + ${project.getId()} + '\');'"
+                                data-target="#edit_project">
+                            </td>
+                            <td th:text="${project.getManager()}">
+                            </td>
+                            <td th:text="${project.getDescription()}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/htmlLoader.js"></script>
+<script src="/static/js/jquery-2.1.4.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/jquery-ui.js"></script>
+<script src="/static/js/bug.js"></script>
+
+<div id="add_project0" class="modal fade" role="dialog"></div>
+<div id="edit_project" class="modal fade" role="dialog"></div>
+
+</body>
+</html>

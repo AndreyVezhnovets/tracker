@@ -1,0 +1,222 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bug tracking system</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet"/>
+    <!--<link href="/static/css/dropZoneStyle.css" rel="stylesheet"/>-->
+    <link href="/static/css/jquery-ui.css" rel="stylesheet"/>
+    <link href="/static/css/business-casual.css" rel="stylesheet"/>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"
+          rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Josefin+Slab:100,300,400,600,700,100italic,300italic,400italic,600italic,700italic"
+          rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="/main/webapp/static/css/bootstrap-dialog.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+</head>
+<body th:onload="'javascript:htmlLoader2( \'/comments?issueId=\', \'#comments\', \'' + ${issue.getId()} + '\');'">
+<div class="brand">Bug tarcker</div>
+<div class="address-bar"> | VAI |</div>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li th:switch="${isAuthenticate}">
+                    <a th:case="false" data-toggle="modal" onclick="htmlLoader('/loginMenu', '#log_in_popup')"
+                       data-target="#log_in_popup">Log in</a>
+                    <a th:case="true" id="log_out">Log out</a>
+                </li>
+                <li>
+                    <a id="start_page" href="/">start page</a>
+                </li>
+                <li th:switch="${isAuthenticate}">
+                    <a th:case="true" data-toggle="modal"
+                       th:onclick="'javascript:htmlLoader2( \'/issues/issue?issueId=\', \'#edit_issue\', \'' + ${issue.getId()} + '\');'"
+                       data-target="#edit_issue">Edit</a>
+                </li>
+                <li th:switch="${isAdmin}">
+                    <a th:case="true" data-toggle="modal" href="/projects">Projects</a>
+                </li>
+                <li th:switch="${isAdmin}">
+                    <a th:case="true" data-toggle="modal" href="/employees">Employees</a>
+                </li>
+                <li th:switch="${isAuthenticate}">
+                    <a  th:case="true" data-toggle="modal"
+                       th:onclick="'javascript:htmlLoader2( \'/uploadFileList?issueId=\', \'#uploaded_files\', \'' + ${issue.getId()} + '\');'"
+                       data-target="#uploaded_files">View Uploads</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="box">
+            <div th:switch="${isAuthenticate}">
+                <div th:case="true">
+                    <div class="panel-body">
+                        <div>
+                            <form id="dropzone-form" class="dropzone" enctype="multipart/form-data">
+                                <div class="dz-default dz-message file-dropzone text-center well col-sm-12">
+                                    <span class="glyphicon glyphicon-paperclip"></span>
+                                    <span>To attach files, drag and drop here</span>
+                                    <br>
+                                    <span>OR</span>
+                                    <br>
+                                    <span>Just Click</span>
+                                </div>
+                                <input name="issueId" id="issueId" th:value="${issue.getId()}" type="text" hidden/>
+                                <!-- this is were the previews should be shown. -->
+                                <div class="dropzone-previews"></div>
+                            </form>
+                            <hr>
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <button id="upload-button">Upload</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="false">
+                    <p style="color: #cd0a0a">Log in if you want to load files</p>
+                </div>
+            </div>
+
+            <div class="col-lg-12 text-center">
+                <div>
+                    <!--/*@thymesVar id="getName" type="com.bug.model.Issue"*/-->
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <td>Summary:</td>
+                            <td th:text="${issue.getSummary()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td th:text="${issue.getDescription()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Status:</td>
+                            <td th:text="${issue.getStatus()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Type:</td>
+                            <td th:text="${issue.getType()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Priority:</td>
+                            <div th:switch="${issue.getPriority()}">
+                                <td th:case="Critical" th:text="${issue.getPriority()}" style="color: #cd0a0a"></td>
+                                <td th:case="Major" th:text="${issue.getPriority()}" style="color: #a94442"></td>
+                                <td th:case="Important" th:text="${issue.getPriority()}" style="color: #8a6d3b"></td>
+                                <td th:case="Minor" th:text="${issue.getPriority()}" style="color: #3c763d"></td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <td>Project:</td>
+                            <td th:text="${issue.getProject()}"></td>
+                        <tr>
+                        <tr>
+                            <td>Assignee:</td>
+                            <td th:text="${issue.getAssignee()}"></td>
+                        </tr>
+                        <tr th:if="${issue.getResolution() != null}">
+                            <td>Resolution:</td>
+                            <td th:text="${issue.getResolution()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div id="comments"></div>
+                    <div th:switch="${isAuthenticate}">
+                        <div th:case="true">
+                            <textarea id="add_comment" placeholder="Your comment"></textarea>
+                            <input name="button" type="button" id="submit" class="submit" value="Comment"
+                                   th:onclick="'javascript:pushCommit(\'' + ${issue.getId()} + '\');'">
+                        </div>
+                        <div th:case="false">
+                            <p style="color: #cd0a0a">Log in if you want to sand comment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #add_comment {
+        background: no-repeat 10px 12px;
+        width: 100%; /* Full-width */
+        font-size: 16px; /* Increase font-size */
+        padding: 12px 20px 12px 40px; /* Add some padding */
+        border: 1px solid #ddd; /* Add a grey border */
+        margin-bottom: 12px; /* Add some space below the input */
+    }
+
+    #comments {
+        overflow-wrap: break-word;
+
+    }
+
+    #commentText {
+        border: 1px solid #000000;
+        padding: 10px;
+    }
+</style>
+<script>
+    function pushCommit(id) {
+        var comment = $('#add_comment').val();
+        $.ajax({
+            type: 'GET',
+            url: '/saveComment',
+            data: 'issueId=' + id + '&comment=' + comment,
+            async: false,
+            success: function () {
+                alert('tada!!')
+            }
+        });
+        htmlLoader2('/comments?issueId=', '#comments', id)
+    }
+
+</script>
+
+<script src="/static/js/getBuildVersions.js"></script>
+<script src="/static/js/htmlLoader.js"></script>
+<script src="/static/js/sorter.js"></script>
+<script src="/static/js/relocate.js"></script>
+<script src="/static/js/jquery-2.1.4.js"></script>
+<script src="/static/js/project.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/jquery-ui.js"></script>
+<script src="/static/js/registration.js"></script>
+
+<script src="/static/js/upload/app.js"></script>
+<script src="/static/js/upload/dropzone.js"></script>
+<script src="/static/js/bootstrap-dialog.min.js"></script>
+<script>
+    $('.carousel').carousel({
+        interval: 5000 //changes the speed
+    })
+</script>
+
+<div id="log_in_popup" class="modal fade" role="dialog"></div>
+
+<div id="uploaded_files" class="modal fade" role="dialog"></div>
+<div id="edit_issue" class="modal fade" role="dialog"></div>
+<div id="sign_in_popup" class="modal fade" role="dialog"></div>
+</body>
+</html>

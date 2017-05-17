@@ -1,0 +1,9 @@
+<!--<script src="/static/js/project.js"></script>-->
+<div xmlns:th="http://www.thymeleaf.org">
+    <!--/*@thymesVar id="build" type="com.bug.model.Build"*/-->
+    <label for="Build_found">Build found:</label>
+    <select class="form-control" id="Build_found">
+        <option th:each="build : ${builds}" th:text="${build.getVersion()}">USER</option>
+    </select>
+</div>
+
