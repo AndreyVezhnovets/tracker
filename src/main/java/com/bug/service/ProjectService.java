@@ -11,7 +11,7 @@ public interface ProjectService {
 
     void save(Project employee);
 
-    void update(Project employee);
+    void update(Project project, int id, String buildId);
 
     void delete(Project employee);
 

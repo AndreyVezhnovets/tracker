@@ -6,7 +6,6 @@ import com.bug.model.Project;
 import com.bug.service.BuildService;
 import com.bug.service.EmployeeService;
 import com.bug.service.ProjectService;
-import com.google.common.collect.Streams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +37,7 @@ public class ProjectController {
         model.addAttribute("employees", employeeService.findAll());
         return "AddProject";
     }
+
     @Transactional
     @RequestMapping(value = {"/editProject"})
     public String editProject(Model model, @RequestParam("projectId") Integer projectId) {
@@ -50,11 +50,11 @@ public class ProjectController {
     @RequestMapping(value = "project/add/new")
     @ResponseBody
     public String addNewProject(@RequestParam("name") String name, @RequestParam("description") String description,
-                              @RequestParam("build") String build, @RequestParam("manager") String manager) throws ProjectException {
+                                @RequestParam("build") String build, @RequestParam("manager") String manager) throws ProjectException {
 
 
         Project project = new Project(name, description, manager);
-        project.setBuildVersions( Collections.singletonList(new Build(build)));
+        project.setBuildVersions(Collections.singletonList(new Build(build)));
         projectService.save(project);
 
         return "success";
@@ -65,17 +65,7 @@ public class ProjectController {
     public String editProject(@RequestParam("name") String name, @RequestParam("description") String description,
                               @RequestParam("build") String build, @RequestParam("manager") String manager, @RequestParam("id") Integer id) throws ProjectException {
 
-        Project old = projectService.findById(id);
-        old.setName(name);
-        old.setDescription(description);
-        old.setManager(manager);
-        projectService.save(old);
-        if (Streams.stream(projectService.getVersions(id)).noneMatch(a -> a.getVersion().equals(build))) {
-            buildService.save(new Build(build, id));
-//            old.getBuildVersions().add();
-//            old.setBuildVersions( );
-        }
-
+        projectService.update(new Project(name, description, manager), id, build);
         return "success";
     }
 }

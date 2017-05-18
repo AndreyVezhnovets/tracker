@@ -52,10 +52,10 @@ public class IssueController {
     }
 
     @RequestMapping(value = {"/saveComment"})
-    public void saveComment(@RequestParam String comment, @RequestParam String issueId, Employee employee) throws IOException {
+    public void saveComment(@RequestParam String comment, @RequestParam Integer issueId, Employee employee) throws IOException {
         String createdBy = String.format("%s %s", employee.getName(), employee.getSurname());
         String createDate = String.valueOf(dateFormat.format(new Date()));
-        commentService.insert(new Comment(comment, createdBy, createDate, Integer.valueOf(issueId)));
+        commentService.insert(new Comment(comment, createdBy, createDate, issueId));
     }
 
     @RequestMapping(value = {"/issueSingle"})
@@ -145,17 +145,11 @@ public class IssueController {
                                @RequestParam("status") String status, @RequestParam("type") String type,
                                @RequestParam("priority") String priority, @RequestParam("projectName") String projectName,
                                @RequestParam("buildFound") String buildFound, @RequestParam("assignee") String assignee,
-                               @RequestParam("id") String id, @RequestParam("resolution") String resolution, Employee employee) throws ProjectException {
+                               @RequestParam("id") Integer id, @RequestParam("resolution") String resolution, Employee employee) throws ProjectException {
 
         if (!summary.isEmpty() && !description.isEmpty()) {
             if (!status.isEmpty() && !type.isEmpty()) {
-                Issue issue = issueService.findById(Integer.parseInt(id));
-                issue.setSummary(summary);
-                issue.setDescription(description);
-                issue.setStatus(status);
-                issue.setType(type);
-                issue.setPriority(priority);
-                issue.setProject(projectName);
+                Issue issue = new Issue(summary, description, status, type, priority, projectName);
                 String modifiedBy = String.format("%s %s", employee.getName(), employee.getSurname());
                 String modifyDate = String.valueOf(dateFormat.format(new Date()));
                 issue.setModifiedBy(modifiedBy);
@@ -163,7 +157,7 @@ public class IssueController {
                 if (!assignee.isEmpty()) issue.setAssignee(assignee);
                 if (!buildFound.isEmpty()) issue.setBuildFound(buildFound);
                 issue.setResolution(resolution);
-                issueService.save(issue);
+                issueService.update(issue, id);
             } else {
                 throw new ProjectException("status or type is empty");
             }
@@ -175,15 +169,15 @@ public class IssueController {
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public String handleFileUpload(MultipartHttpServletRequest request, @RequestParam String issueId, Employee employee) throws IOException {
+    public String handleFileUpload(MultipartHttpServletRequest request, @RequestParam Integer issueId, Employee employee) throws IOException {
         Map<String, MultipartFile> fileMap = request.getFileMap();
         for (MultipartFile multipartFile : fileMap.values()) {
             byte[] bytes = multipartFile.getBytes();
             String addedBy = String.format("%s %s", employee.getName(), employee.getSurname());
             String addedDate = String.valueOf(dateFormat.format(new Date()));
             try {
-                attachmentService.save(new Attachment(bytes, multipartFile.getOriginalFilename(), addedBy, addedDate, Integer.valueOf(issueId), multipartFile.getContentType()));
-            } catch (Exception e){
+                attachmentService.save(new Attachment(bytes, multipartFile.getOriginalFilename(), addedBy, addedDate, issueId, multipartFile.getContentType()));
+            } catch (Exception e) {
                 return "file already exist";
             }
         }
@@ -191,9 +185,9 @@ public class IssueController {
     }
 
     @RequestMapping(value = "/get/file", method = RequestMethod.GET)
-    public void getFile(HttpServletResponse response, @RequestParam("fileId") String fileId) {
+    public void getFile(HttpServletResponse response, @RequestParam("fileId") Integer fileId) {
 
-         Attachment attachment = attachmentService.findOne(Integer.valueOf(fileId));
+        Attachment attachment = attachmentService.findOne(fileId);
 
         try {
             response.setContentType(attachment.getType());
@@ -204,9 +198,10 @@ public class IssueController {
             e.printStackTrace();
         }
     }
+
     @RequestMapping(value = {"/uploadFileList"})
-    public String listFiles(@RequestParam("issueId") String issueId, Model model) {
-        model.addAttribute("files", attachmentService.findAttachmentByIssueId(Integer.parseInt(issueId)));
+    public String listFiles(@RequestParam("issueId") Integer issueId, Model model) {
+        model.addAttribute("files", attachmentService.findAttachmentByIssueId(issueId));
         return "uploadFileList";
     }
 
